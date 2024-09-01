@@ -8,17 +8,19 @@ public class Reservation {
     private Long id;
     private String name;
     private LocalDate date;
+    private Long timeId;
     private LocalTime time;
 
 
     public Reservation() {
     }
 
-    public Reservation (Long id, String name, LocalDate date, LocalTime time) {
+    public Reservation(Long id, String name, LocalDate date, Long timeId, LocalTime time) {
         this.id = id;
-        this.name= name;
+        this.name = name;
         this.date = date;
-        this.time =time;
+        this.timeId = timeId;
+        this.time = time;
     }
 
     public Long getId() {
@@ -32,6 +34,8 @@ public class Reservation {
     public LocalDate getDate() {
         return date;
     }
+
+    public Long getTimeId() { return timeId; }
 
     public LocalTime getTime() {
         return time;
@@ -49,7 +53,20 @@ public class Reservation {
         this.date = date;
     }
 
+    public void setTimeId(Long timeId) { this.timeId = timeId; }
+
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", timeId=" + timeId +
+                ", time=" + time +
+                '}';
     }
 }

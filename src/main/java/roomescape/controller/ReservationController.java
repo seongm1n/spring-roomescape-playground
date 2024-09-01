@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import roomescape.Reservation;
 import roomescape.repository.QueryingDAO;
+import roomescape.service.ReservationService;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -16,43 +17,54 @@ import java.util.concurrent.atomic.AtomicLong;
 @Controller
 public class ReservationController {
 
+    /*
     private final QueryingDAO queryingDAO;
 
     public ReservationController(QueryingDAO queryingDAO){
         this.queryingDAO=queryingDAO;
     }
+     */
+
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
     @GetMapping("/reservation")
     public String Reservation(Model model) {
-        model.addAttribute("reservations", queryingDAO.findAll());
+        model.addAttribute("reservations", reservationService.findAll());
         return "reservation";
     }
 
     @GetMapping("/reservations")
     @ResponseBody
     public ResponseEntity<List<Reservation>> getReservations() {
-        return ResponseEntity.ok(queryingDAO.findAll());
+        return ResponseEntity.ok(reservationService.findAll());
     }
 
     @PostMapping("/reservations")
     public ResponseEntity<Reservation> create(@RequestBody Reservation request) {
         if(request.getName() == null || request.getName().isBlank() ||
-                request.getDate() == null || request.getTime() == null){
+                request.getDate() == null || request.getTimeId() == null){
             throw new IllegalArgumentException("데이터가 비었습니다.");
         }
 
-        final Reservation newReservation = queryingDAO.insert(request);
-        return ResponseEntity.created(URI.create("/reservations/"+newReservation.getId())).body(newReservation);
+        final Reservation newReservation = new Reservation(
+                null,
+                request.getName(),
+                request.getDate(),
+                request.getTimeId(),
+                null // time is not required for creation
+        );
+
+        final Reservation savedReservation = reservationService.create(request);
+        return ResponseEntity.created(URI.create("/reservations/"+savedReservation.getId())).body(savedReservation);
     }
 
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        boolean flag = queryingDAO.delete(id);
-
-        if(!flag){
-            throw new IllegalArgumentException("예약이 없습니다.");
-        }
-
+        reservationService.delete(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -26,14 +26,17 @@ public class QueryingDAO {
     }
 
     public List<Reservation> findAll() {
-        return jdbcTemplate.query("SELECT * FROM reservation", new ReservationRowMapper());
+        String sql = "SELECT r.id AS reservation_id, r.name, r.date, t.id AS time_id, t.time AS time_value " +
+                "FROM reservation r " +
+                "INNER JOIN time t ON r.time_id = t.id";
+        return jdbcTemplate.query(sql, new ReservationRowMapper());
     }
 
     public Reservation insert(Reservation reservation) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", reservation.getName());
         parameters.put("date", reservation.getDate());
-        parameters.put("time", reservation.getTime());
+        parameters.put("time_id", reservation.getTimeId());
 
         Number id = simpleJdbcInsert.executeAndReturnKey(parameters);
         reservation.setId(id.longValue());
@@ -56,7 +59,8 @@ public class QueryingDAO {
             reservation.setId(rs.getLong("id"));
             reservation.setName(rs.getString("name"));
             reservation.setDate(rs.getDate("date").toLocalDate());
-            reservation.setTime(rs.getTime("time").toLocalTime());
+            reservation.setTimeId(rs.getLong("time_id"));
+            reservation.setTime(rs.getTime("time_value").toLocalTime());
             return reservation;
         }
     }
