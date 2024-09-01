@@ -3,16 +3,16 @@ package roomescape.exception.handler;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import roomescape.exception.ReservationNotFoundException;
+import roomescape.exception.ReservationTimeNotFoundException;
 import roomescape.exception.dto.ErrorResponseDto;
 
-@RestControllerAdvice // 전역 예외 처리
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
                             .getAllErrors()
                             .stream()
                             .map(error -> error.getDefaultMessage())
-                            .collect(Collectors.toList());
+                            .toList();
 
     ErrorResponseDto errorResponse = new ErrorResponseDto(
         LocalDateTime.now(),
@@ -35,18 +35,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.badRequest().body(errorResponse);
   }
 
-  @ExceptionHandler(ReservationNotFoundException.class)
-  public ResponseEntity<ErrorResponseDto> handleNotFoundReservationException(ReservationNotFoundException e, HttpServletRequest request) {
-    ErrorResponseDto errorResponse = new ErrorResponseDto(
-        LocalDateTime.now(),
-        HttpStatus.NOT_FOUND.value(),
-        HttpStatus.NOT_FOUND.getReasonPhrase(),
-        e.getMessage(),
-        request.getRequestURI()
-    );
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-  }
-
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
     ErrorResponseDto errorResponse = new ErrorResponseDto(
@@ -57,5 +45,29 @@ public class GlobalExceptionHandler {
         request.getRequestURI()
     );
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+  }
+
+  @ExceptionHandler(ReservationNotFoundException.class)
+  public ResponseEntity<ErrorResponseDto> handleReservationNotFoundException(ReservationNotFoundException e, HttpServletRequest request) {
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
+        LocalDateTime.now(),
+        HttpStatus.NOT_FOUND.value(),
+        HttpStatus.NOT_FOUND.getReasonPhrase(),
+        e.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+  }
+
+  @ExceptionHandler(ReservationTimeNotFoundException.class)
+  public ResponseEntity<ErrorResponseDto> handledReservationTimeNotFoundException(ReservationNotFoundException e, HttpServletRequest request) {
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
+        LocalDateTime.now(),
+        HttpStatus.NOT_FOUND.value(),
+        HttpStatus.NOT_FOUND.getReasonPhrase(),
+        e.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 }

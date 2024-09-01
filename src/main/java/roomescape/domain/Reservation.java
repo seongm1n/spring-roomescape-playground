@@ -1,9 +1,7 @@
 package roomescape.domain;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Objects;
-import roomescape.exception.ErrorMessage;
 
 public class Reservation {
 
@@ -13,9 +11,9 @@ public class Reservation {
 
   private final LocalDate date;
 
-  private final LocalTime time;
+  private final ReservationTime time;
 
-  public Reservation(Long id, String name, LocalDate date, LocalTime time) {
+  public Reservation(Long id, String name, LocalDate date, ReservationTime time) {
     validateDate(date);
     this.id = id;
     this.name = name;
@@ -29,7 +27,7 @@ public class Reservation {
 
   private void validateDate(LocalDate date) {
     if (date.isBefore(LocalDate.now())) {
-      throw new IllegalArgumentException(ErrorMessage.INVALID_DATE.getMessage());
+      throw new IllegalArgumentException("[ERROR] 과거의 예약은 생성할 수 없습니다.");
     }
   }
 
@@ -45,7 +43,7 @@ public class Reservation {
     return date;
   }
 
-  public LocalTime getTime() {
+  public ReservationTime getTime() {
     return time;
   }
 

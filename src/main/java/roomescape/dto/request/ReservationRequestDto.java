@@ -3,7 +3,6 @@ package roomescape.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class ReservationRequestDto {
 
@@ -13,13 +12,13 @@ public class ReservationRequestDto {
   @NotNull(message = "[ERROR] 날짜가 비어 있습니다.")
   private final LocalDate date;
 
-  @NotNull(message = "[ERROR] 시간이 비어 있습니다.")
-  private final LocalTime time;
+  @NotNull(message = "[ERROR] 예약 시간을 선택해야합니다.")
+  private final Long timeId;
 
-  public ReservationRequestDto(String name, LocalDate date, LocalTime time) {
+  public ReservationRequestDto(String name, LocalDate date, Long time) {
     this.name = name;
     this.date = date;
-    this.time = time;
+    this.timeId = time;
   }
 
   public String getName() {
@@ -30,7 +29,7 @@ public class ReservationRequestDto {
     return date;
   }
 
-  public LocalTime getTime() {
-    return time;
+  public Long getTimeId() {
+    return timeId;
   }
 }

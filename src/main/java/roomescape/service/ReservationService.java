@@ -1,32 +1,43 @@
 package roomescape.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.Reservation;
-import roomescape.infrastructure.ReservationRepository;
+import roomescape.domain.ReservationRepository;
+import roomescape.domain.ReservationTimeRepository;
+import roomescape.dto.request.ReservationRequestDto;
 import roomescape.exception.ReservationNotFoundException;
+import roomescape.service.dto.ReservationDto;
 
 @Transactional
-@Service // 해당 클래스를 Bean 으로 인식, 의존성 주입이 가능하다
+@Service
 public class ReservationService {
 
   private final ReservationRepository reservationRepository;
+  private final ReservationTimeRepository reservationTimeRepository;
 
-  public ReservationService(ReservationRepository reservationRepository) {
+  public ReservationService(ReservationRepository reservationRepository,
+      ReservationTimeRepository reservationTimeRepository) {
     this.reservationRepository = reservationRepository;
+    this.reservationTimeRepository = reservationTimeRepository;
   }
 
   @Transactional(readOnly = true)
   public List<ReservationDto> findAll() {
     return reservationRepository.findAll().stream()
                                 .map(ReservationDto::from)
-                                .collect(Collectors.toList());
+                                .toList();
   }
 
-  public ReservationDto save(Reservation reservation) {
-    Reservation savedReservation = reservationRepository.save(reservation);
+  public ReservationDto save(final ReservationRequestDto reservationRequestDto) {
+    Reservation newReservation = new Reservation(
+        null,
+        reservationRequestDto.getName(),
+        reservationRequestDto.getDate(),
+        reservationTimeRepository.findById(reservationRequestDto.getTimeId())
+    );
+    Reservation savedReservation = reservationRepository.save(newReservation);
     return ReservationDto.from(savedReservation);
   }
 
