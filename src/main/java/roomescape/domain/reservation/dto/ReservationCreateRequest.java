@@ -1,13 +1,11 @@
-package roomescape.controller.dto;
+package roomescape.domain.reservation.dto;
+
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public record ReservationCreateRequest(
-
     @NotBlank
     String name,
 
@@ -15,6 +13,6 @@ public record ReservationCreateRequest(
     LocalDate date,
 
     @NotNull
-    LocalTime time
+    Long time
 ) {
 }
