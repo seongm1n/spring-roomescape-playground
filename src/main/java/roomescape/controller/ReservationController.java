@@ -2,7 +2,6 @@ package roomescape.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,26 +13,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import roomescape.dao.ReservationDao;
 import roomescape.dto.RequestCreateReservation;
 import roomescape.dto.ResponseReservation;
+import roomescape.service.ReservationService;
 
-@RequestMapping("/reservations")
 @RestController
+@RequestMapping("/reservations")
 public class ReservationController {
 
-    private final ReservationDao reservationDao;
+    private final ReservationService reservationService;
 
-    public ReservationController(ReservationDao reservationDao) {
-        this.reservationDao = reservationDao;
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     @PostMapping
     public ResponseEntity<ResponseReservation> createReservation(
         @Valid @RequestBody RequestCreateReservation requestCreateReservation
     ) {
-        ResponseReservation responseReservation = reservationDao.createReservation(requestCreateReservation);
-
+        ResponseReservation responseReservation = reservationService.createReservation(requestCreateReservation);
         return ResponseEntity
             .created(URI.create("/reservations/" + responseReservation.id()))
             .body(responseReservation);
@@ -41,7 +39,7 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity<List<ResponseReservation>> getReservations() {
-        List<ResponseReservation> responseReservations = reservationDao.getReservations();
+        List<ResponseReservation> responseReservations = reservationService.getReservations();
         return ResponseEntity.ok(responseReservations);
     }
 
@@ -49,10 +47,7 @@ public class ReservationController {
     public ResponseEntity<Void> deleteReservation(
         @PathVariable Long id
     ) {
-        if (!reservationDao.deleteReservation(id)) {
-            throw new NoSuchElementException("존재하지 않는 예약 정보입니다");
-        }
-
+        reservationService.deleteReservation(id);
         return ResponseEntity.noContent().build();
     }
 }

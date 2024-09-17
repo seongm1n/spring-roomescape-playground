@@ -2,7 +2,7 @@ package roomescape.entity;
 
 import static lombok.AccessLevel.PROTECTED;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,17 +10,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Reservation {
+public class Time {
     private Long id;
-    private String name;
-    private LocalDate date;
-    private Time time;
+    private LocalTime time;
 
     @Builder(toBuilder = true)
-    public Reservation(Long id, String name, LocalDate date, Time time) {
+    public Time(Long id, LocalTime time) {
         this.id = id;
-        this.name = name;
-        this.date = date;
         this.time = time;
     }
 }
