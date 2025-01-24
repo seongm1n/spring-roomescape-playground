@@ -4,8 +4,6 @@ import roomescape.entity.Reservation;
 import roomescape.exception.EntityNotFoundException;
 import roomescape.service.ReservationRepository;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,36 +15,7 @@ public class InMemoryReservationRepositoryImpl implements ReservationRepository 
     private final AtomicLong id = new AtomicLong(1);
 
     public InMemoryReservationRepositoryImpl() {
-        reservations = initialReservationsSetting();
-    }
-
-    private Map<Long, Reservation> initialReservationsSetting() {
-        String name = "brown";
-        Reservation reservation1 = new Reservation(
-                id.getAndIncrement(),
-                name,
-                LocalDate.of(2023,1,1),
-                LocalTime.of(10, 0,0)
-        );
-        Reservation reservation2 = new Reservation(
-                id.getAndIncrement(),
-                name,
-                LocalDate.of(2023,1,2),
-                LocalTime.of(11, 0,0)
-        );
-        Reservation reservation3 = new Reservation(
-                id.getAndIncrement(),
-                name,
-                LocalDate.of(2023,1,3),
-                LocalTime.of(12, 0,0)
-        );
-
-
-        return new HashMap<Long, Reservation>() {{
-            put(reservation1.getId(), reservation1);
-            put(reservation2.getId(), reservation2);
-            put(reservation3.getId(), reservation3);
-        }};
+        reservations = new HashMap<>();
     }
 
     @Override
@@ -55,7 +24,7 @@ public class InMemoryReservationRepositoryImpl implements ReservationRepository 
 
         Reservation reservationWithId = new Reservation(
                 newId,
-                reservation.getName(),
+                reservation.getPerson(),
                 reservation.getDate(),
                 reservation.getTime()
         );

@@ -2,11 +2,12 @@ package roomescape.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import roomescape.entity.Person;
 import roomescape.entity.Reservation;
+import roomescape.entity.Time;
 import roomescape.util.CustomDateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public record ReservationRequestDto(
         @NotBlank
@@ -15,15 +16,14 @@ public record ReservationRequestDto(
         @NotBlank
         @NotNull
         String date,
-        @NotBlank
         @NotNull
-        String time
+        Long time
 ) {
     public Reservation toEntity() {
         return new Reservation(
-            this.name,
+            new Person(this.name),
             LocalDate.parse(date, CustomDateTimeFormat.dateFormatter),
-            LocalTime.parse(time, CustomDateTimeFormat.timeFormatter)
+            new Time(time)
         );
     }
 }

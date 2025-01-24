@@ -6,18 +6,14 @@ public record ReservationResponseDto(
         Long id,
         String name,
         String date,
-        String time
+        TimeResponseDto time
 ) {
     public static ReservationResponseDto fromEntity(Reservation reservation) {
-        if (reservation == null) {
-            return null;
-        }
-
         return new ReservationResponseDto(
                 reservation.getId(),
-                reservation.getName(),
+                reservation.getPerson().getName(),
                 reservation.getDate().format(CustomDateTimeFormat.dateFormatter),
-                reservation.getTime().format(CustomDateTimeFormat.timeFormatter)
+                TimeResponseDto.fromEntity(reservation.getTime())
         );
     }
 }
