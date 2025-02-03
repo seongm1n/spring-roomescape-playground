@@ -1,14 +1,18 @@
 package roomescape.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import roomescape.domain.dto.ReservationDto;
 import roomescape.domain.entity.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class ReservationController {
     private final List<Reservation> reservations;
 
@@ -26,7 +30,9 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     @ResponseBody
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<ReservationDto> getReservations() {
+        return reservations.stream()
+                .map(ReservationDto::from)
+                .collect(Collectors.toList());
     }
 }
