@@ -1,18 +1,23 @@
 package roomescape.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import roomescape.domain.entity.Reservation;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ReservationDto {
-    private Long id;
-    private String name;
-    private String date;
-    private String time;
+    private final Long id;
+    private final String name;
+    private final String date;
+    private final String time;
+
+    public ReservationDto() {
+        this(null, null, null, null);
+    }
+
+    public ReservationDto(Long id, String name, String date, String time) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.time = time;
+    }
 
     public static ReservationDto from(Reservation reservation) {
         return new ReservationDto(
@@ -21,5 +26,21 @@ public class ReservationDto {
                 reservation.getDate(),
                 reservation.getTime()
         );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 }
