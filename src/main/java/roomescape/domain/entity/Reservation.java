@@ -24,11 +24,11 @@ public class Reservation {
         return name;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getReservationDate() {
         return reservationDate;
     }
 
-    public Time getTime() {
+    public Time getReservationTime() {
         return reservationTime;
     }
 }
