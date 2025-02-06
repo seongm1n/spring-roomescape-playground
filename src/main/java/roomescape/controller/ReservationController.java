@@ -1,21 +1,43 @@
 package roomescape.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import roomescape.domain.dto.ReservationRequest;
+import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
     private final List<Reservation> reservations = new ArrayList<>();
+    private final AtomicLong index = new AtomicLong(0);
 
     @GetMapping
-    public List<Reservation> getReservations() {
-        return reservations;
+    public ResponseEntity<List<ReservationResponse>> getReservations() {
+        List<ReservationResponse> response = reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest request) {
+        Reservation reservation = new Reservation(
+                index.incrementAndGet(),
+                request.getName(),
+                request.getDate(),
+                request.getTime()
+        );
+        reservations.add(reservation);
+        return ResponseEntity
+                .created(URI.create("/reservations/" + reservation.getId()))
+                .body(ReservationResponse.from(reservation));
     }
 }

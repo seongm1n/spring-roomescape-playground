@@ -4,18 +4,18 @@ import java.time.LocalTime;
 
 public class Time {
     private final Long id;
-    private final LocalTime value;
+    private final LocalTime time;
 
-    public Time(Long id, LocalTime value) {
+    public Time(Long id, LocalTime time) {
         this.id = id;
-        this.value = value;
+        this.time = time;
     }
 
     public Long getId() {
         return id;
     }
 
-    public LocalTime getValue() {
-        return value;
+    public LocalTime getTime() {
+        return time;
     }
 }
