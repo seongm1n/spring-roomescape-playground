@@ -40,4 +40,19 @@ public class ReservationController {
                 .created(URI.create("/reservations/" + reservation.getId()))
                 .body(ReservationResponse.from(reservation));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        Reservation reservation = reservations.stream()
+                .filter(r -> r.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (reservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        reservations.remove(reservation);
+        return ResponseEntity.noContent().build();
+    }
 }
