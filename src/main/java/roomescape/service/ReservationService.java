@@ -7,7 +7,6 @@ import roomescape.domain.entity.Reservation;
 import roomescape.exception.NotFoundReservationException;
 import roomescape.valid.ReservationValidator;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,7 +22,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public URI createReservation(ReservationRequest request) {
+    public ReservationResponse createReservation(ReservationRequest request) {
         ReservationValidator.validate(request);
 
         Reservation reservation = new Reservation(
@@ -33,7 +32,7 @@ public class ReservationService {
                 request.getTime()
         );
         reservations.add(reservation);
-        return URI.create("/reservations/" + reservation.getId());
+        return ReservationResponse.from(reservation);
     }
 
     public void deleteReservation(long id) {

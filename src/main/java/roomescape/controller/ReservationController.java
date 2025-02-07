@@ -6,6 +6,7 @@ import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.service.ReservationService;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -25,7 +26,9 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest request) {
-        return ResponseEntity.created(reservationService.createReservation(request)).build();
+        ReservationResponse response = reservationService.createReservation(request);
+        return ResponseEntity.created(URI.create("/reservations/" + response.getId()))
+                .body(response);
     }
 
     @DeleteMapping("/{id}")
