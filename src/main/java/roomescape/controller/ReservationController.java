@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
+import roomescape.exception.NotFoundReservationException;
+import roomescape.valid.ReservationValidator;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationRequest request) {
+        ReservationValidator.validate(request);
         Reservation reservation = new Reservation(
                 index.incrementAndGet(),
                 request.getName(),
@@ -46,11 +49,7 @@ public class ReservationController {
         Reservation reservation = reservations.stream()
                 .filter(r -> r.getId().equals(id))
                 .findFirst()
-                .orElse(null);
-
-        if (reservation == null) {
-            return ResponseEntity.notFound().build();
-        }
+                .orElseThrow(() -> new NotFoundReservationException("해당 예약을 찾을 수 없습니다."));
 
         reservations.remove(reservation);
         return ResponseEntity.noContent().build();

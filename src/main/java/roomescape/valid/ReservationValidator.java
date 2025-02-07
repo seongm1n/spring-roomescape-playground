@@ -3,7 +3,7 @@ package roomescape.valid;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.exception.InvalidReservationRequestException;
 
-public class RservationValidator {
+public class ReservationValidator {
 
     public static void validate(ReservationRequest request) {
         if (request.getName() == null || request.getName().isBlank()) {
