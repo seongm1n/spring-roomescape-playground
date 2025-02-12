@@ -23,7 +23,7 @@ public class ReservationRepository {
                 new Reservation(
                         rs.getLong("id"),
                         rs.getString("name"),
-                        LocalDate.parse(rs.getString("date")),
+                        rs.getObject("date", LocalDate.class),
                         Time.of(rs.getString("time"))
                 ));
 
