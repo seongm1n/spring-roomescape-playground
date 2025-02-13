@@ -7,6 +7,7 @@ import roomescape.domain.entity.Reservation;
 import roomescape.domain.entity.Time;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -24,7 +25,7 @@ public class ReservationRepository {
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getObject("date", LocalDate.class),
-                        Time.of(rs.getString("time"))
+                        Time.of(rs.getObject("time", LocalTime.class))
                 ));
 
         return reservations.stream()

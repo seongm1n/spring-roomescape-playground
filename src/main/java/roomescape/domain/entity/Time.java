@@ -13,8 +13,8 @@ public class Time {
         this.time = time;
     }
 
-    public static Time of(String time) {
-        return new Time(null, LocalTime.parse(time, TIME_FORMATTER));
+    public static Time of(LocalTime time) {
+        return new Time(null, time);
     }
 
     public Long getId() {
