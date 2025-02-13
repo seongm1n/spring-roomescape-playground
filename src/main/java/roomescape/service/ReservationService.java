@@ -23,7 +23,10 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> getReservations() {
-        return reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 
     public ReservationResponse createReservation(ReservationRequest request) {

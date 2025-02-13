@@ -13,7 +13,7 @@ public class ReservationRequest {
     public ReservationRequest(LocalDate date, String name, LocalTime time) {
         this.date = date;
         this.name = name;
-        this.time = Time.of(time);
+        this.time = new Time(time);
     }
 
     public LocalDate getDate() {

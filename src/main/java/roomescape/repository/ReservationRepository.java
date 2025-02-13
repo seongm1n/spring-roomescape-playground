@@ -2,7 +2,6 @@ package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.domain.entity.Time;
 
@@ -18,18 +17,14 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<ReservationResponse> findAll() {
-        String sql = "SELECT * FROM reservation";
-        List<Reservation> reservations = jdbcTemplate.query(sql, (rs, rowNum) ->
+    public List<Reservation> findAll() {
+        String sql = "SELECT id, name, date, time FROM reservation";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
                 new Reservation(
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getObject("date", LocalDate.class),
-                        Time.of(rs.getObject("time", LocalTime.class))
+                        new Time(rs.getObject("time", LocalTime.class))
                 ));
-
-        return reservations.stream()
-                .map(ReservationResponse::from)
-                .toList();
     }
 }
