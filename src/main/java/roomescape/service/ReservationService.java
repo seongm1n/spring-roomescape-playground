@@ -5,6 +5,7 @@ import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.exception.NotFoundReservationException;
+import roomescape.repository.ReservationRepository;
 import roomescape.valid.ReservationValidator;
 
 import java.util.ArrayList;
@@ -15,8 +16,14 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ReservationService {
     private final List<Reservation> reservations = new ArrayList<>();
     private final AtomicLong index = new AtomicLong(0);
+    private final ReservationRepository reservationRepository;
+
+    public ReservationService(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
+    }
 
     public List<ReservationResponse> getReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
         return reservations.stream()
                 .map(ReservationResponse::from)
                 .toList();
