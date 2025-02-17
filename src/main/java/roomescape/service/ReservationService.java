@@ -1,53 +1,37 @@
 package roomescape.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
-import roomescape.exception.NotFoundReservationException;
 import roomescape.repository.ReservationRepository;
-import roomescape.valid.ReservationValidator;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ReservationService {
-    private final List<Reservation> reservations = new ArrayList<>();
-    private final AtomicLong index = new AtomicLong(0);
     private final ReservationRepository reservationRepository;
 
     public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<ReservationResponse> getReservations() {
-        List<Reservation> reservations = reservationRepository.findAll();
-        return reservations.stream()
+    public List<ReservationResponse> findAll() {
+        return reservationRepository.findAll().stream()
                 .map(ReservationResponse::from)
                 .toList();
     }
 
-    public ReservationResponse createReservation(ReservationRequest request) {
-        ReservationValidator.validate(request);
-
-        Reservation reservation = new Reservation(
-                index.incrementAndGet(),
-                request.getName(),
-                request.getDate(),
-                request.getTime()
-        );
-        reservations.add(reservation);
-        return ReservationResponse.from(reservation);
+    @Transactional
+    public ReservationResponse save(ReservationRequest request) {
+        Reservation reservation = request.toEntity();
+        Long id = reservationRepository.save(reservation);
+        return new ReservationResponse(id, reservation.getName(), reservation.getReservationDate(), reservation.getReservationTime());
     }
 
-    public void deleteReservation(long id) {
-        Reservation reservation = reservations.stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundReservationException("해당 예약을 찾을 수 없습니다."));
-
-        reservations.remove(reservation);
+    @Transactional
+    public void deleteById(Long id) {
+        reservationRepository.deleteById(id);
     }
 }
