@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import roomescape.domain.dto.ReservationResponse;
-import roomescape.domain.entity.Reservation;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -45,14 +44,14 @@ public class MissionStepTest {
                 .when().get("/reservations")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(3));
+                .body("size()", is(0));
     }
 
     @Test
     void 삼단계() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        params.put("date", "2025-08-05");
         params.put("time", "15:40");
 
         RestAssured.given().log().all()
@@ -132,7 +131,7 @@ public class MissionStepTest {
     void 칠단계() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        params.put("date", "2025-08-05");
         params.put("time", "10:00");
 
         RestAssured.given().log().all()

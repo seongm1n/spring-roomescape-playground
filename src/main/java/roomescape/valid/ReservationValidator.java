@@ -1,12 +1,14 @@
 package roomescape.valid;
 
+import org.springframework.stereotype.Component;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.exception.InvalidReservationRequestException;
+import roomescape.repository.ReservationRepository;
 
 import java.time.LocalDate;
 
+@Component
 public class ReservationValidator {
-
     public static void validate(ReservationRequest request) {
         if (request.getName() == null || request.getName().isBlank()) {
             throw new InvalidReservationRequestException("이름은 필수 입력 값입니다.");

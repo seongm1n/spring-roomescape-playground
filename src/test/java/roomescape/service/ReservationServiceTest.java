@@ -11,10 +11,12 @@ import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.domain.entity.Time;
 import roomescape.repository.ReservationRepository;
+import roomescape.valid.ReservationValidator;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -33,8 +35,8 @@ public class ReservationServiceTest {
 
     @BeforeEach
     void setUp() {
-        reservation = new Reservation(1L, "브라운", LocalDate.of(2023, 8, 5), new Time(LocalTime.of(10, 0)));
-        request = new ReservationRequest(LocalDate.of(2023, 8, 5), "브라운", LocalTime.of(10, 0));
+        reservation = new Reservation(1L, "브라운", LocalDate.of(2025, 8, 5), new Time(LocalTime.of(10, 0)));
+        request = new ReservationRequest(LocalDate.of(2025, 8, 5), "브라운", LocalTime.of(10, 0));
     }
 
     @Test
@@ -68,6 +70,7 @@ public class ReservationServiceTest {
     @Test
     void 예약_삭제() {
         // given
+        when(reservationRepository.existsById(1L)).thenReturn(true);
         doNothing().when(reservationRepository).deleteById(1L);
 
         // when
