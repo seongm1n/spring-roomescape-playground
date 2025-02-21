@@ -6,6 +6,7 @@ import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.repository.ReservationRepository;
+import roomescape.valid.ReservationValidator;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class ReservationService {
 
     @Transactional
     public ReservationResponse save(ReservationRequest request) {
+        ReservationValidator.validate(request);
         Reservation reservation = request.toEntity();
         Long id = reservationRepository.save(reservation);
         return new ReservationResponse(id, reservation.getName(), reservation.getReservationDate(), reservation.getReservationTime());
