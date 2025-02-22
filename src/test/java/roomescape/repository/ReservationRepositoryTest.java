@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JdbcTest
 public class ReservationRepositoryTest {
@@ -43,9 +44,11 @@ public class ReservationRepositoryTest {
         List<Reservation> reservations = reservationRepository.findAll();
 
         // then
-        assertThat(id).isNotNull();
-        assertThat(reservations).hasSize(1);
-        assertThat(reservations.get(0).getName()).isEqualTo("브라운");
+        assertAll(
+                () -> assertThat(id).isNotNull(),
+                () -> assertThat(reservations).hasSize(1),
+                () -> assertThat(reservations.get(0).getName()).isEqualTo("브라운")
+        );
     }
 
     @Test
