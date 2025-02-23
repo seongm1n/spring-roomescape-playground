@@ -3,7 +3,9 @@ package roomescape.domain.entity;
 import java.time.LocalTime;
 
 public class Time {
-    private final LocalTime time;
+    private LocalTime time;
+
+    public Time() {}
 
     public Time(LocalTime time) {
         this.time = time;
