@@ -1,0 +1,34 @@
+package roomescape.service;
+
+import org.springframework.stereotype.Service;
+import roomescape.domain.dto.TimeRequest;
+import roomescape.domain.dto.TimeResponse;
+import roomescape.domain.entity.Time;
+import roomescape.repository.TimeRepository;
+
+import java.util.List;
+
+@Service
+public class TimeService {
+    private final TimeRepository timeRepository;
+
+    public TimeService(TimeRepository timeRepository) {
+        this.timeRepository = timeRepository;
+    }
+
+    public List<TimeResponse> findAll() {
+        return timeRepository.findAll().stream()
+                .map(time -> new TimeResponse(time.getId(), time.getTime()))
+                .toList();
+    }
+
+    public TimeResponse save(TimeRequest request) {
+        Time time = new Time(null, request.getTime());
+        Long id = timeRepository.save(time);
+        return new TimeResponse(id, time.getTime());
+    }
+
+    public void deleteById(Long id) {
+        timeRepository.deleteById(id);
+    }
+}
