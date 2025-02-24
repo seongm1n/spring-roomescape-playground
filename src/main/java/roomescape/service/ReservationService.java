@@ -1,13 +1,11 @@
 package roomescape.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.exception.InvalidReservationRequestException;
 import roomescape.repository.ReservationRepository;
-import roomescape.valid.ReservationValidator;
 
 import java.util.List;
 
@@ -25,15 +23,12 @@ public class ReservationService {
                 .toList();
     }
 
-    @Transactional
     public ReservationResponse save(ReservationRequest request) {
-        ReservationValidator.validate(request);
         Reservation reservation = request.toEntity();
         Long id = reservationRepository.save(reservation);
         return new ReservationResponse(id, reservation.getName(), reservation.getReservationDate(), reservation.getReservationTime());
     }
 
-    @Transactional
     public void deleteById(Long id) {
         if (id == null || !reservationRepository.existsById(id)) {
             throw new InvalidReservationRequestException("이미 삭제된 예약입니다.");
