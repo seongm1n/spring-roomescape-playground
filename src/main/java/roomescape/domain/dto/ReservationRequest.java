@@ -14,7 +14,7 @@ public class ReservationRequest {
     public ReservationRequest(LocalDate date, String name, LocalTime time) {
         this.date = date;
         this.name = name;
-        this.time = new Time(time);
+        this.time = new Time(null, time);
     }
 
     public Reservation toEntity() {

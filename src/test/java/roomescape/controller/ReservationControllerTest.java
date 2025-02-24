@@ -37,7 +37,7 @@ public class ReservationControllerTest {
     void findAllReservations() throws Exception {
         // given
         List<ReservationResponse> responses = List.of(
-                new ReservationResponse(1L, "브라운", LocalDate.of(2023, 8, 5), new Time(LocalTime.of(10, 0)))
+                new ReservationResponse(1L, "브라운", LocalDate.of(2023, 8, 5), new Time(null, LocalTime.of(10, 0)))
         );
         given(reservationService.findAll()).willReturn(responses);
 
@@ -56,7 +56,7 @@ public class ReservationControllerTest {
     void createReservation() throws Exception {
         // given
         ReservationRequest request = new ReservationRequest(LocalDate.of(2023, 8, 5), "브라운", LocalTime.of(10, 0));
-        ReservationResponse response = new ReservationResponse(1L, "브라운", LocalDate.of(2023, 8, 5), new Time(LocalTime.of(10, 0)));
+        ReservationResponse response = new ReservationResponse(1L, "브라운", LocalDate.of(2023, 8, 5), new Time(null, LocalTime.of(10, 0)));
 
         given(reservationService.save(Mockito.any(ReservationRequest.class))).willReturn(response);
 

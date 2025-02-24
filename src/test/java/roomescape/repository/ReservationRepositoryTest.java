@@ -37,7 +37,7 @@ public class ReservationRepositoryTest {
     @Test
     void 예약을_저장하고_조회할_수_있다() {
         // given
-        Reservation reservation = new Reservation(null, "브라운", LocalDate.of(2023, 8, 5), new Time(LocalTime.of(10, 0)));
+        Reservation reservation = new Reservation(null, "브라운", LocalDate.of(2023, 8, 5), new Time(null, LocalTime.of(10, 0)));
 
         // when
         Long id = reservationRepository.save(reservation);
@@ -54,7 +54,7 @@ public class ReservationRepositoryTest {
     @Test
     void 예약을_삭제할_수_있다() {
         // given
-        Reservation reservation = new Reservation(null, "브라운", LocalDate.of(2023, 8, 5), new Time(LocalTime.of(10, 0)));
+        Reservation reservation = new Reservation(null, "브라운", LocalDate.of(2023, 8, 5), new Time(null, LocalTime.of(10, 0)));
         Long id = reservationRepository.save(reservation);
 
         // when

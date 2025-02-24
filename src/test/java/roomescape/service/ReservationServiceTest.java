@@ -11,12 +11,10 @@ import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
 import roomescape.domain.entity.Time;
 import roomescape.repository.ReservationRepository;
-import roomescape.valid.ReservationValidator;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -30,7 +28,7 @@ public class ReservationServiceTest {
     @InjectMocks
     private ReservationService reservationService;
 
-    private final Reservation reservation = new Reservation(1L, "브라운", LocalDate.of(2025, 8, 5), new Time(LocalTime.of(10, 0)));
+    private final Reservation reservation = new Reservation(1L, "브라운", LocalDate.of(2025, 8, 5), new Time(null, LocalTime.of(10, 0)));
     private final ReservationRequest request = new ReservationRequest(LocalDate.of(2025, 8, 5), "브라운", LocalTime.of(10, 0));
 
     @Test

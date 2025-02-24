@@ -31,7 +31,7 @@ public class ReservationRepository {
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getObject("date", LocalDate.class),
-                        new Time(rs.getObject("time", LocalTime.class))
+                        new Time(null, rs.getObject("time", LocalTime.class))
                 ));
     }
 
