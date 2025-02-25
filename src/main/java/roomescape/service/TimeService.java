@@ -18,14 +18,14 @@ public class TimeService {
 
     public List<TimeResponse> findAll() {
         return timeRepository.findAll().stream()
-                .map(time -> new TimeResponse(time.getId(), time.getTime()))
+                .map(TimeResponse::new)
                 .toList();
     }
 
     public TimeResponse save(TimeRequest request) {
         Time time = new Time(null, request.getTime());
         Long id = timeRepository.save(time);
-        return new TimeResponse(id, time.getTime());
+        return new TimeResponse(new Time(id, request.getTime()));
     }
 
     public void deleteById(Long id) {

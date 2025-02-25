@@ -4,29 +4,34 @@ import org.springframework.stereotype.Service;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
+import roomescape.domain.entity.Time;
 import roomescape.exception.InvalidReservationRequestException;
 import roomescape.repository.ReservationRepository;
+import roomescape.repository.TimeRepository;
 
 import java.util.List;
 
 @Service
 public class ReservationService {
     private final ReservationRepository reservationRepository;
+    private final TimeRepository timeRepository;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository, TimeRepository timeRepository) {
         this.reservationRepository = reservationRepository;
+        this.timeRepository = timeRepository;
     }
 
     public List<ReservationResponse> findAll() {
         return reservationRepository.findAll().stream()
-                .map(ReservationResponse::from)
+                .map(ReservationResponse::new)
                 .toList();
     }
 
     public ReservationResponse save(ReservationRequest request) {
-        Reservation reservation = request.toEntity();
-        Long id = reservationRepository.save(reservation);
-        return new ReservationResponse(id, reservation.getName(), reservation.getReservationDate(), reservation.getReservationTime());
+        Time time = timeRepository.findById(request.getTime());
+        Long id = reservationRepository.save(request.getName(), request.getDate(), time.getId());
+        Reservation reservation = new Reservation(id, request.getName(), request.getDate(), time);
+        return new ReservationResponse(reservation);
     }
 
     public void deleteById(Long id) {

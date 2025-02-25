@@ -1,12 +1,11 @@
 package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.entity.Time;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ public class TimeRepository {
 
     public List<Time> findAll() {
         String sql = "SELECT id, time FROM time";
-        return jdbcTemplate.query(sql, this::mapRowToTime);
+        return jdbcTemplate.query(sql, timeRowMapper);
     }
 
     public Long save(Time time) {
@@ -41,10 +40,14 @@ public class TimeRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    private Time mapRowToTime(ResultSet rs, int rowNum) throws SQLException {
+    public Time findById(Long id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?", timeRowMapper, id);
+    }
+
+    private final RowMapper<Time> timeRowMapper = (rs, rowNum) -> {
         return new Time(
                 rs.getLong("id"),
                 rs.getObject("time", LocalTime.class)
         );
-    }
+    };
 }
