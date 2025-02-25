@@ -1,5 +1,7 @@
 package roomescape.domain.entity;
 
+import roomescape.exception.InvalidTimeRequestException;
+
 import java.time.LocalTime;
 
 public class Time {
@@ -7,8 +9,15 @@ public class Time {
     private LocalTime time;
 
     public Time(Long id, LocalTime time) {
+        validate(time);
         this.id = id;
         this.time = time;
+    }
+
+    private void validate(LocalTime time) {
+        if (time == null) {
+            throw new InvalidTimeRequestException("시간은 필수 입력 값입니다.");
+        }
     }
 
     public Long getId() {

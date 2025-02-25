@@ -5,8 +5,6 @@ import java.time.LocalTime;
 public class TimeRequest {
     private LocalTime time;
 
-    public TimeRequest() {}
-
     public TimeRequest(LocalTime time) {
         this.time = time;
     }

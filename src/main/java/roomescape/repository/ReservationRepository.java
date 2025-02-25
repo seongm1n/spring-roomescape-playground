@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.entity.Reservation;
 import roomescape.domain.entity.Time;
 
@@ -26,11 +25,6 @@ public class ReservationRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
-    private final RowMapper<Reservation> reservationRowMapper = (rs, rowNum) -> {
-        Time time = new Time(rs.getLong("time_id"), rs.getObject("time_value", LocalTime.class));
-        return new Reservation(rs.getLong("reservation_id"), rs.getString("name"), rs.getObject("date", LocalDate.class), time);
-    };
-
     public List<Reservation> findAll() {
         String sql = """
             SELECT r.id AS reservation_id, r.name, r.date, t.id AS time_id, t.time AS time_value 
@@ -40,7 +34,6 @@ public class ReservationRepository {
         return jdbcTemplate.query(sql, reservationRowMapper);
     }
 
-    @Transactional
     public Long save(String name, LocalDate date, Long timeId) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", name);
@@ -60,4 +53,9 @@ public class ReservationRepository {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count > 0;
     }
+
+    private final RowMapper<Reservation> reservationRowMapper = (rs, rowNum) -> {
+        Time time = new Time(rs.getLong("time_id"), rs.getObject("time_value", LocalTime.class));
+        return new Reservation(rs.getLong("reservation_id"), rs.getString("name"), rs.getObject("date", LocalDate.class), time);
+    };
 }
