@@ -1,6 +1,7 @@
 package roomescape.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.dto.ReservationRequest;
 import roomescape.domain.dto.ReservationResponse;
 import roomescape.domain.entity.Reservation;
@@ -27,6 +28,7 @@ public class ReservationService {
                 .toList();
     }
 
+    @Transactional
     public ReservationResponse save(ReservationRequest request) {
         Time time = timeRepository.findById(request.getTime());
         Long id = reservationRepository.save(request.getName(), request.getDate(), time.getId());

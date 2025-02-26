@@ -1,6 +1,7 @@
 package roomescape.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.dto.TimeRequest;
 import roomescape.domain.dto.TimeResponse;
 import roomescape.domain.entity.Time;
@@ -22,6 +23,7 @@ public class TimeService {
                 .toList();
     }
 
+    @Transactional
     public TimeResponse save(TimeRequest request) {
         Time time = new Time(null, request.getTime());
         Long id = timeRepository.save(time);
