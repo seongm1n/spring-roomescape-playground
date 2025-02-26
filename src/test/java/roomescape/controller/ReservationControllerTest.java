@@ -1,0 +1,71 @@
+package roomescape.controller;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import roomescape.domain.dto.ReservationRequest;
+import roomescape.domain.dto.ReservationResponse;
+import roomescape.domain.entity.Reservation;
+import roomescape.domain.entity.Time;
+import roomescape.service.ReservationService;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(ReservationController.class)
+public class ReservationControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private ReservationService reservationService;
+
+    @Test
+    void testFindAll() throws Exception {
+        when(reservationService.findAll()).thenReturn(List.of());
+
+        mockMvc.perform(get("/reservations"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    void testSave() throws Exception {
+        ReservationResponse response = new ReservationResponse(new Reservation(1L, "seongmin", LocalDate.now().plusDays(1), new Time(1L, LocalTime.of(10, 0))));
+
+        when(reservationService.save(any(ReservationRequest.class))).thenReturn(response);
+
+        mockMvc.perform(post("/reservations")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("""
+                            {
+                                        "name": "seongmin",
+                                        "date": "2023-12-31",
+                                        "time": 1
+                                    }
+                            """))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/reservations/1"))
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("seongmin"))
+                .andExpect(jsonPath("$.time.id").value(1L))
+                .andExpect(jsonPath("$.time.time").value("10:00:00"));
+    }
+
+    @Test
+    void testDelete() throws Exception {
+        mockMvc.perform(delete("/reservations/1"))
+                .andExpect(status().isNoContent());
+    }
+}
