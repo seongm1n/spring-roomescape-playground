@@ -38,7 +38,7 @@ public class TimeServiceTest {
         List<TimeResponse> times = timeService.findAll();
 
         assertThat(times).hasSize(1);
-        assertThat(times.get(0).getTime()).isEqualTo(LocalTime.of(10, 0));
+        assertThat(times.get(0).time()).isEqualTo(LocalTime.of(10, 0));
     }
 
     @Test
@@ -48,8 +48,8 @@ public class TimeServiceTest {
 
         TimeResponse response = timeService.save(request);
 
-        assertThat(response.getId()).isEqualTo(1L);
-        assertThat(response.getTime()).isEqualTo(LocalTime.of(10, 0));
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.time()).isEqualTo(LocalTime.of(10, 0));
     }
 
     @Test

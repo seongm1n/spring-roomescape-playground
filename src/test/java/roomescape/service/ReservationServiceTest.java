@@ -47,7 +47,7 @@ public class ReservationServiceTest {
         List<ReservationResponse> responses = reservationService.findAll();
 
         assertThat(responses).hasSize(1);
-        assertThat(responses.get(0).getName()).isEqualTo("seongmin");
+        assertThat(responses.get(0).name()).isEqualTo("seongmin");
     }
 
     @Test
@@ -59,8 +59,8 @@ public class ReservationServiceTest {
 
         ReservationResponse response = reservationService.save(request);
 
-        assertThat(response.getName()).isEqualTo("seongmin");
-        assertThat(response.getDate()).isEqualTo(LocalDate.of(2025, 10, 10));
+        assertThat(response.name()).isEqualTo("seongmin");
+        assertThat(response.date()).isEqualTo(LocalDate.of(2025, 10, 10));
     }
 
     @Test

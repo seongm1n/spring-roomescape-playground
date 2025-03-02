@@ -19,9 +19,9 @@ public class TimeController {
     }
 
     @PostMapping
-    public ResponseEntity<TimeResponse> create(@RequestBody TimeRequest request) {
+    public ResponseEntity<TimeResponse> save(@RequestBody TimeRequest request) {
         TimeResponse response = timeService.save(request);
-        return ResponseEntity.created(URI.create("/times/" + response.getId()))
+        return ResponseEntity.created(URI.create("/times/" + response.id()))
                 .body(response);
     }
 

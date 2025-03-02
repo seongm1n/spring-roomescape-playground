@@ -3,6 +3,7 @@ package roomescape.domain.entity;
 import roomescape.exception.InvalidReservationRequestException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Reservation {
     private final Long id;
@@ -31,8 +32,8 @@ public class Reservation {
             throw new InvalidReservationRequestException("예약 시간은 필수 입력 값입니다.");
         }
 
-        if (reservationDate.isBefore(LocalDate.now())) {
-            throw new InvalidReservationRequestException("과거 날짜로는 예약할 수 없습니다.");
+        if (reservationDate.isBefore(LocalDate.now()) && reservationTime.getTime().isBefore(LocalTime.now())) {
+            throw new InvalidReservationRequestException("과거로는 예약할 수 없습니다.");
         }
     }
 

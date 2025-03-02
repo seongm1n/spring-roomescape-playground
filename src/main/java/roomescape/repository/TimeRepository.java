@@ -44,10 +44,8 @@ public class TimeRepository {
         return jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?", timeRowMapper, id);
     }
 
-    private final RowMapper<Time> timeRowMapper = (rs, rowNum) -> {
-        return new Time(
-                rs.getLong("id"),
-                rs.getObject("time", LocalTime.class)
-        );
-    };
+    private final RowMapper<Time> timeRowMapper = (rs, rowNum) -> new Time(
+            rs.getLong("id"),
+            rs.getObject("time", LocalTime.class)
+    );
 }

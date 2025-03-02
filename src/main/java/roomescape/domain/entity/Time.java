@@ -5,8 +5,8 @@ import roomescape.exception.InvalidTimeRequestException;
 import java.time.LocalTime;
 
 public class Time {
-    private Long id;
-    private LocalTime time;
+    private final Long id;
+    private final LocalTime time;
 
     public Time(Long id, LocalTime time) {
         validate(time);

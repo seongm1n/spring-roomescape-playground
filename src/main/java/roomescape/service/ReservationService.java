@@ -30,9 +30,9 @@ public class ReservationService {
 
     @Transactional
     public ReservationResponse save(ReservationRequest request) {
-        Time time = timeRepository.findById(request.getTime());
-        Long id = reservationRepository.save(request.getName(), request.getDate(), time.getId());
-        Reservation reservation = new Reservation(id, request.getName(), request.getDate(), time);
+        Time time = timeRepository.findById(request.timeId());
+        Long id = reservationRepository.save(request.name(), request.date(), time.getId());
+        Reservation reservation = new Reservation(id, request.name(), request.date(), time);
         return new ReservationResponse(reservation);
     }
 

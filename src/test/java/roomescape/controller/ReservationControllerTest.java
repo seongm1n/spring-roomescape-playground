@@ -32,12 +32,21 @@ public class ReservationControllerTest {
 
     @Test
     void testFindAll() throws Exception {
-        when(reservationService.findAll()).thenReturn(List.of());
+        ReservationResponse response1 = new ReservationResponse(new Reservation(1L, "seongmin", LocalDate.now().plusDays(1), new Time(1L, LocalTime.of(10, 0))));
+        ReservationResponse response2 = new ReservationResponse(new Reservation(2L, "theo", LocalDate.now().plusDays(2), new Time(2L, LocalTime.of(11, 0))));
+
+        when(reservationService.findAll()).thenReturn(List.of(response1, response2));
 
         mockMvc.perform(get("/reservations"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].name").value("seongmin"))
+                .andExpect(jsonPath("$[0].time.id").value(1L))
+                .andExpect(jsonPath("$[1].name").value("theo"))
+                .andExpect(jsonPath("$[1].time.id").value(2L))
+                .andExpect(jsonPath("$[1].time.time").value("11:00:00"));
     }
 
     @Test
