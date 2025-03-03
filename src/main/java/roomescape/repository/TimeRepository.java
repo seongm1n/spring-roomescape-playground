@@ -1,10 +1,12 @@
 package roomescape.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.entity.Time;
+import roomescape.exception.InvalidTimeRequestException;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -41,7 +43,11 @@ public class TimeRepository {
     }
 
     public Time findById(Long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?", timeRowMapper, id);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM time WHERE id = ?", timeRowMapper, id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new InvalidTimeRequestException("해당 ID의 시간을 찾을 수 없습니다: " + id);
+        }
     }
 
     private final RowMapper<Time> timeRowMapper = (rs, rowNum) -> new Time(
