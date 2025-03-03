@@ -32,7 +32,8 @@ public class Reservation {
             throw new InvalidReservationRequestException("예약 시간은 필수 입력 값입니다.");
         }
 
-        if (reservationDate.isBefore(LocalDate.now()) && reservationTime.getTime().isBefore(LocalTime.now())) {
+        if (reservationDate.isBefore(LocalDate.now()) ||
+                (reservationDate.isEqual(LocalDate.now()) && reservationTime.getTime().isBefore(LocalTime.now()))) {
             throw new InvalidReservationRequestException("과거로는 예약할 수 없습니다.");
         }
     }
