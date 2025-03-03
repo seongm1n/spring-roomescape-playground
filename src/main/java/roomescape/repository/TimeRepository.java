@@ -28,9 +28,9 @@ public class TimeRepository {
         return jdbcTemplate.query(sql, timeRowMapper);
     }
 
-    public Long save(Time time) {
+    public Long save(LocalTime time) {
         Map<String, Object> params = new HashMap<>();
-        params.put("time", time.getTime().toString());
+        params.put("time", time.toString());
 
         return simpleJdbcInsert.executeAndReturnKey(params).longValue();
     }

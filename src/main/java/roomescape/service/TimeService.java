@@ -25,8 +25,7 @@ public class TimeService {
 
     @Transactional
     public TimeResponse save(TimeRequest request) {
-        Time time = new Time(null, request.time());
-        Long id = timeRepository.save(time);
+        Long id = timeRepository.save(request.time());
         return new TimeResponse(new Time(id, request.time()));
     }
 
