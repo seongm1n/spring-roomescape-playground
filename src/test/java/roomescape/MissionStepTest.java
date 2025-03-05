@@ -13,6 +13,7 @@ import roomescape.domain.dto.ReservationResponse;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class MissionStepTest {
 
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2025-08-05");
+        params.put("date", LocalDate.now().plusDays(1).toString());
         params.put("timeId", "1");
 
         RestAssured.given().log().all()
