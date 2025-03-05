@@ -13,6 +13,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JdbcTest
 public class ReservationRepositoryTest {
@@ -33,24 +35,29 @@ public class ReservationRepositoryTest {
     void testFindAll() {
         Long timeId1 = 1L;
         Long timeId2 = 2L;
-        reservationRepository.save("seongmin", LocalDate.of(2025, 10, 10), timeId1);
-        reservationRepository.save("theo", LocalDate.of(2025, 10, 11), timeId2);
+        LocalDate date1 = LocalDate.now().plusDays(1);
+        LocalDate date2 = LocalDate.now().plusDays(2);
+        reservationRepository.save("seongmin", date1, timeId1);
+        reservationRepository.save("theo", date2, timeId2);
 
         List<Reservation> reservations = reservationRepository.findAll();
-        assertThat(reservations).hasSize(2);
-        assertThat(reservations.get(0).getName()).isEqualTo("seongmin");
-        assertThat(reservations.get(0).getReservationDate()).isEqualTo(LocalDate.of(2025, 10, 10));
-        assertThat(reservations.get(0).getReservationTime().getTime()).isEqualTo(LocalTime.of(10, 0));
-        assertThat(reservations.get(1).getName()).isEqualTo("theo");
-        assertThat(reservations.get(1).getReservationDate()).isEqualTo(LocalDate.of(2025, 10, 11));
-        assertThat(reservations.get(1).getReservationTime().getTime()).isEqualTo(LocalTime.of(11, 0));
+
+        assertAll(
+                () -> assertThat(reservations).hasSize(2),
+                () -> assertThat(reservations)
+                        .extracting("name", "reservationDate", "reservationTime.time")
+                        .containsExactlyInAnyOrder(
+                                tuple("seongmin", date1, LocalTime.of(10, 0)),
+                                tuple("theo", date2, LocalTime.of(11, 0))
+                        )
+        );
     }
 
     @Test
     void testSave() {
         Long timeId = 1L;
-        Long id = reservationRepository.save("seongmin", LocalDate.of(2025, 10, 10), timeId);
-        Assertions.assertAll(
+        Long id = reservationRepository.save("seongmin", LocalDate.now().plusDays(1), timeId);
+        assertAll(
                 () -> assertThat(id).isNotNull(),
                 () -> assertThat(reservationRepository.existsById(id)).isTrue()
         );
@@ -59,7 +66,7 @@ public class ReservationRepositoryTest {
     @Test
     void testDeleteById() {
         Long timeId = 1L;
-        Long id = reservationRepository.save("seongmin", LocalDate.of(2025, 10, 10), timeId);
+        Long id = reservationRepository.save("seongmin", LocalDate.now().plusDays(1), timeId);
         assertThat(reservationRepository.existsById(id)).isTrue();
         reservationRepository.deleteById(id);
         assertThat(reservationRepository.existsById(id)).isFalse();
@@ -68,7 +75,7 @@ public class ReservationRepositoryTest {
     @Test
     void testExistsById() {
         Long timeId = 1L;
-        Long id = reservationRepository.save("seongmin", LocalDate.of(2025, 10, 10), timeId);
+        Long id = reservationRepository.save("seongmin", LocalDate.now().plusDays(1), timeId);
         assertThat(reservationRepository.existsById(id)).isTrue();
         assertThat(reservationRepository.existsById(100L)).isFalse();
     }
