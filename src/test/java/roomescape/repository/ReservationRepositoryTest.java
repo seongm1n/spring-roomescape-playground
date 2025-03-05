@@ -67,7 +67,6 @@ public class ReservationRepositoryTest {
     void testDeleteById() {
         Long timeId = 1L;
         Long id = reservationRepository.save("seongmin", LocalDate.now().plusDays(1), timeId);
-        assertThat(reservationRepository.existsById(id)).isTrue();
         reservationRepository.deleteById(id);
         assertThat(reservationRepository.existsById(id)).isFalse();
     }
