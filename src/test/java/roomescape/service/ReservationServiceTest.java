@@ -41,7 +41,7 @@ public class ReservationServiceTest {
 
     @Test
     void testFindAll() {
-        Reservation reservation = new Reservation(1L, "seongmin", LocalDate.of(2025, 10, 10), new Time(1L, LocalTime.of(10, 0)));
+        Reservation reservation = new Reservation(1L, "seongmin", LocalDate.now().plusDays(1), new Time(1L, LocalTime.of(10, 0)));
         when(reservationRepository.findAll()).thenReturn(List.of(reservation));
 
         List<ReservationResponse> responses = reservationService.findAll();
@@ -53,14 +53,14 @@ public class ReservationServiceTest {
     @Test
     void testSave() {
         Time time = new Time(1L, LocalTime.of(10, 0));
-        ReservationRequest request = new ReservationRequest(LocalDate.of(2025, 10, 10), "seongmin", 1L);
+        ReservationRequest request = new ReservationRequest(LocalDate.now().plusDays(1), "seongmin", 1L);
         when(timeRepository.findById(anyLong())).thenReturn(time);
         when(reservationRepository.save(anyString(), any(LocalDate.class), anyLong())).thenReturn(1L);
 
         ReservationResponse response = reservationService.save(request);
 
         assertThat(response.name()).isEqualTo("seongmin");
-        assertThat(response.date()).isEqualTo(LocalDate.of(2025, 10, 10));
+        assertThat(response.date()).isEqualTo(LocalDate.now().plusDays(1));
     }
 
     @Test

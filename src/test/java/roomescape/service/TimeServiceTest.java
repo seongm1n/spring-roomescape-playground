@@ -44,7 +44,7 @@ public class TimeServiceTest {
     @Test
     void testSave() {
         TimeRequest request = new TimeRequest(LocalTime.of(10, 0));
-        when(timeRepository.save(any(Time.class))).thenReturn(1L);
+        when(timeRepository.save(any(LocalTime.class))).thenReturn(1L);
 
         TimeResponse response = timeService.save(request);
 

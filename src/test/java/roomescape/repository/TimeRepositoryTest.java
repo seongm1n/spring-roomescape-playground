@@ -34,8 +34,7 @@ public class TimeRepositoryTest {
 
     @Test
     void testSave() {
-        Time time = new Time(null, LocalTime.of(10, 0));
-        Long id = timeRepository.save(time);
+        Long id = timeRepository.save(LocalTime.of(10, 0));
         assertThat(id).isNotNull();
         Time savedTime = timeRepository.findById(id);
         assertThat(savedTime.getId()).isEqualTo(id);

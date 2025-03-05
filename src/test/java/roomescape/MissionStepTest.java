@@ -129,7 +129,7 @@ public class MissionStepTest {
     void 육단계() {
         jdbcTemplate.update("INSERT INTO time (time) VALUES (?)", "15:40");
 
-        jdbcTemplate.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)", "브라운", "2023-08-05", 1);
+        jdbcTemplate.update("INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)", "브라운", "2025-08-05", 1);
 
         List<ReservationResponse> reservations = RestAssured.given().log().all()
                 .when().get("/reservations")
