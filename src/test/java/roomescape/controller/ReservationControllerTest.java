@@ -51,19 +51,21 @@ public class ReservationControllerTest {
 
     @Test
     void testSave() throws Exception {
-        ReservationResponse response = new ReservationResponse(new Reservation(1L, "seongmin", LocalDate.now().plusDays(1), new Time(1L, LocalTime.of(10, 0))));
+        ReservationRequest request = new ReservationRequest(LocalDate.now().plusDays(1), "seongmin", 1L);
+        Reservation reservation = new Reservation(1L, "seongmin", request.date(), new Time(1L, LocalTime.of(10, 0)));
+        ReservationResponse response = new ReservationResponse(reservation);
 
         when(reservationService.save(any(ReservationRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/reservations")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("""
-                            {
-                                        "name": "seongmin",
-                                        "date": "2023-12-31",
-                                        "time": 1
-                                    }
-                            """))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                            "name": "seongmin",
+                            "date": "%s",
+                            "time": 1
+                        }
+                        """.formatted(request.date())))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/reservations/1"))
                 .andExpect(jsonPath("$.id").value(1L))
