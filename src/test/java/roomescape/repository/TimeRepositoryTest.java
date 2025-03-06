@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @JdbcTest
 public class TimeRepositoryTest {
@@ -27,9 +28,22 @@ public class TimeRepositoryTest {
 
     @Test
     void testFindAll() {
-        jdbcTemplate.update("INSERT INTO TIME (ID, TIME) VALUES (?, ?)", 1L, "10:00");
+        for (long i = 1; i <= 5; i++) {
+            jdbcTemplate.update("INSERT INTO TIME (ID, TIME) VALUES (?, ?)", i, String.format("%02d:00", i % 24));
+        }
+
         List<Time> times = timeRepository.findAll();
-        assertThat(times.get(0).getId()).isEqualTo(1L);
+
+        assertThat(times)
+                .hasSize(5)
+                .extracting(Time::getId, Time::getTime)
+                .containsExactly(
+                        tuple(1L, LocalTime.of(1, 0)),
+                        tuple(2L, LocalTime.of(2, 0)),
+                        tuple(3L, LocalTime.of(3, 0)),
+                        tuple(4L, LocalTime.of(4, 0)),
+                        tuple(5L, LocalTime.of(5, 0))
+                );
     }
 
     @Test
