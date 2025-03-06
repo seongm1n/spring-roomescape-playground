@@ -33,7 +33,7 @@ public class Reservation {
         }
 
         if (reservationDate.isBefore(LocalDate.now()) ||
-                (reservationDate.isEqual(LocalDate.now()) && reservationTime.getTime().isBefore(LocalTime.now()))) {
+                (reservationDate.isEqual(LocalDate.now()) && reservationTime.isBefore(LocalTime.now()))) {
             throw new InvalidReservationRequestException("과거로는 예약할 수 없습니다.");
         }
     }

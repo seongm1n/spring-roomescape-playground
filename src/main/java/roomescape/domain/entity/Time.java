@@ -27,4 +27,8 @@ public class Time {
     public LocalTime getTime() {
         return time;
     }
+
+    public boolean isBefore(LocalTime now) {
+        return time.isBefore(now);
+    }
 }
