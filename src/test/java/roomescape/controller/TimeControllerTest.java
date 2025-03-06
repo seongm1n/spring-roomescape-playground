@@ -29,12 +29,18 @@ public class TimeControllerTest {
 
     @Test
     void testFindAll() throws Exception {
-        when(timeService.findAll()).thenReturn(List.of());
+        when(timeService.findAll()).thenReturn(List.of(
+                new TimeResponse(new Time(1L, LocalTime.of(10, 0))),
+                new TimeResponse(new Time(2L, LocalTime.of(11, 0)))
+        ));
 
         mockMvc.perform(get("/times"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].time").value("10:00:00"))
+                .andExpect(jsonPath("$[1].id").value(2L));
     }
 
     @Test
