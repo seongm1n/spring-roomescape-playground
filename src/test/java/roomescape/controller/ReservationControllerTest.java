@@ -43,8 +43,12 @@ public class ReservationControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("seongmin"))
+                .andExpect(jsonPath("$[0].date").value(LocalDate.now().plusDays(1).toString()))
                 .andExpect(jsonPath("$[0].time.id").value(1L))
+                .andExpect(jsonPath("$[0].time.time").value("10:00:00"))
+                .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value("theo"))
+                .andExpect(jsonPath("$[1].date").value(LocalDate.now().plusDays(2).toString()))
                 .andExpect(jsonPath("$[1].time.id").value(2L))
                 .andExpect(jsonPath("$[1].time.time").value("11:00:00"));
     }
