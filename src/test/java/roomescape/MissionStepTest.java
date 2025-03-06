@@ -158,7 +158,7 @@ public class MissionStepTest {
 
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2025-08-05");
+        params.put("date", LocalDate.now().plusDays(1).toString());
         params.put("timeId", "1");
 
         RestAssured.given().log().all()
